@@ -19,7 +19,7 @@ jobs:
           - uses: actions/checkout@v3
           - name: Check the item status
             id: check
-            uses: grantmcdade/andagon-aqua-status-check@6f85819ddc1472fc42a8cab52299f875ffe58b36
+            uses: grantmcdade/andagon-aqua-status-check@9b37d8b52af10eabb76f173060839775110f8abd
             with:
               branch_name: '${{ github.head_ref }}'
               branch_name_expr: '(.*)\/.*'
