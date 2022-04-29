@@ -1,0 +1,31 @@
+name: 'Check if ready to merge'
+description: 'Check if the issue status is ''Ready to merge'''
+inputs:
+  branch_name:
+    description: 'The name of the branch in the required format'
+    required: true
+  branch_name_expr:
+    description: 'The regular expression used to extract the item ID from the branch name'
+    required: true
+  aqua_url:
+    description: 'The HTTPS location of the aqua server'
+    required: true
+  username:
+    description: 'The AQUA username to login with'
+    required: true
+  password:
+    description: 'The password of the AQUA user'
+    required: true
+  ready_to_merge_status_id:
+    description: 'The Id of the status code require for the action to succeed'
+    required: true
+outputs:
+  itemCode:
+    description: 'The complete item code'
+  itemType:
+    description: 'The 2 character item type i.e. RQ or DF etc.'
+  itemId:
+    description: 'The numeric item number (still as a string padded with 0''s'
+runs:
+  using: 'node16'
+  main: 'index.js'
