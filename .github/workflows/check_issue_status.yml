@@ -1,0 +1,30 @@
+name: Check Item Status
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - '**.js'
+      - '**.vue'
+      - '**.ts'
+      - .github/workflows/build.yml
+      - .github/workflows/check_issue_status.yml
+concurrency:
+  group: "vue-${{ github.ref }}-${{ github.workspace }}"
+  cancel-in-progress: true
+
+jobs:
+    check:
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@v3
+          - name: Check the item status
+            id: check
+            uses: grantmcdade/andagon-aqua-status-check@v1
+            with:
+              branch_name: '${{ github.head_ref }}'
+              branch_name_expr: '(.*)\/.*'
+              username: '${{ env.AQUA_USERNAME }}'
+              password: '${{ secrets.AQUA_PASSWORD }}'
+              aqua_url: '${{ env.AQUA_URL }}'
+              ready_to_merge_status_id: '20294'
+              
