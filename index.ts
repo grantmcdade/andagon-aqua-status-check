@@ -17,9 +17,9 @@ try {
     const itemType = itemCode.slice(0, 2);
     const itemId = itemCode.slice(2);
 
-    githubCore.setOutput("itemCode", itemCode);
-    githubCore.setOutput("itemType", itemType);
-    githubCore.setOutput("itemId", itemId);
+    githubCore.setOutput("item_code", itemCode);
+    githubCore.setOutput("item_type", itemType);
+    githubCore.setOutput("item_id", itemId);
     
     console.log('Item type is:', itemType);
     console.log('Item id is:', itemId);
