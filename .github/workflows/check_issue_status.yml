@@ -18,7 +18,7 @@ jobs:
         steps:
           - name: Check the item status
             id: check
-            uses: grantmcdade/andagon-aqua-status-check@1c0d2e75b46ef5d741b355f9becff8ac02de777a
+            uses: grantmcdade/andagon-aqua-status-check@v1
             with:
               branch_name: '${{ github.head_ref }}'
               branch_name_expr: '(.*)\/.*'
