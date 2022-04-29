@@ -28,7 +28,6 @@ export async function checkStatus({
                                       itemId,
                                       statusNotSetMessage
                                   }: CheckStatusArgs) {
-    console.log('Checking the item status');
     switch (itemType) {
         case 'RQ':
             const requirement = await aqua.getRequirement(itemId);

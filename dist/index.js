@@ -4762,7 +4762,6 @@ const githubCore = __importStar(__nccwpck_require__(7561));
  * @param statusNotSetMessage The message to show when the item does not have the status code
  */
 async function checkStatus({ aqua, statusId, itemType, itemId, statusNotSetMessage }) {
-    console.log('Checking the item status');
     switch (itemType) {
         case 'RQ':
             const requirement = await aqua.getRequirement(itemId);
