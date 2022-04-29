@@ -1,5 +1,9 @@
 import axios from 'axios';
 
+/**
+ * An interface definition for Aqua's base object to allow
+ * for reading the status in a type safe way.
+ */
 interface BaseObject {
   Details: [{
     Value: Record<string, string | number>,
@@ -15,6 +19,12 @@ export class Aqua {
   baseUrl: string | undefined;
   token: string | undefined;
 
+  /**
+   * A function that handles the login
+   * @param aquaUrl The URL to the Aqua server (excluding /api/...)
+   * @param username The Aqua user to log in as
+   * @param password The password for the Aqua user
+   */
   async login(
     aquaUrl: string,
     username: string,
@@ -40,6 +50,10 @@ export class Aqua {
     return false;
   }
 
+  /**
+   * Call the GET /api/Requirement/:itemId endpoint
+   * @param itemId The Id of the item to retrieve
+   */
   async getRequirement(itemId: string) {
     const url = `${this.baseUrl}/api/Requirement/${itemId}`
 
@@ -52,6 +66,10 @@ export class Aqua {
     return response.data;
   }
 
+  /**
+   * Call the GET /api/Defect/:itemId endpoint
+   * @param itemId The Id of the item to retrieve
+   */
   async getDefect(itemId: string) {
     const url = `${this.baseUrl}/api/Defect/${itemId}`
 
@@ -65,7 +83,7 @@ export class Aqua {
   }
 
   /**
-   * Check that the item is ready to merge
+   // * Check if the item has the specified status code
    * @param statusId The Id of the status to look for
    * @param item The item that should be checked
    * @returns true if the item has the specified status

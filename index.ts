@@ -2,6 +2,14 @@ import * as githubCore from '@actions/core';
 import {Aqua} from './aqua';
 import {checkStatus} from "./checkStatus";
 
+/* Overview
+- Extract the item code from the branch name.
+- Use said item code to determine the item type and Id.
+- Fetch the item details using Aqua's REST API.
+- Check if the required status code is set.
+- Fail the action with the given message if necessary
+ */
+
 try {
     const branchName = githubCore.getInput('branch_name');
     const branchNameExpr = githubCore.getInput('branch_name_expr');
@@ -45,6 +53,10 @@ try {
     githubCore.setFailed(error.message);
 }
 
+/**
+ * Generic error handler to use in Promise.catch statements
+ * @param error The error that was raised
+ */
 function handleError(error: Record<string, string>) {
     githubCore.setFailed(error.message ?? 'An error occurred');
 }

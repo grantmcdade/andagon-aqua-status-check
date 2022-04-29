@@ -4657,6 +4657,12 @@ const axios_1 = __importDefault(__nccwpck_require__(9202));
  * The class through which all access to Aqua is controlled
  */
 class Aqua {
+    /**
+     * A function that handles the login
+     * @param aquaUrl The URL to the Aqua server (excluding /api/...)
+     * @param username The Aqua user to log in as
+     * @param password The password for the Aqua user
+     */
     async login(aquaUrl, username, password) {
         let success = false;
         const data = `username=${username}&password=${password}&grant_type=password`;
@@ -4674,6 +4680,10 @@ class Aqua {
         this.token = undefined;
         return false;
     }
+    /**
+     * Call the GET /api/Requirement/:itemId endpoint
+     * @param itemId The Id of the item to retrieve
+     */
     async getRequirement(itemId) {
         const url = `${this.baseUrl}/api/Requirement/${itemId}`;
         const response = await axios_1.default.get(url, {
@@ -4683,6 +4693,10 @@ class Aqua {
         });
         return response.data;
     }
+    /**
+     * Call the GET /api/Defect/:itemId endpoint
+     * @param itemId The Id of the item to retrieve
+     */
     async getDefect(itemId) {
         const url = `${this.baseUrl}/api/Defect/${itemId}`;
         const response = await axios_1.default.get(url, {
@@ -4693,7 +4707,7 @@ class Aqua {
         return response.data;
     }
     /**
-     * Check that the item is ready to merge
+     // * Check if the item has the specified status code
      * @param statusId The Id of the status to look for
      * @param item The item that should be checked
      * @returns true if the item has the specified status
@@ -4739,18 +4753,25 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.checkStatus = void 0;
 const githubCore = __importStar(__nccwpck_require__(7561));
+/**
+ * A function to check the status of an item
+ * @param aqua The logged in instance of the Aqua API handler
+ * @param statusId The status code's Id
+ * @param itemType The item type RQ, DF etc.
+ * @param itemId The six digit item Id
+ * @param statusNotSetMessage The message to show when the item does not have the status code
+ */
 async function checkStatus({ aqua, statusId, itemType, itemId, statusNotSetMessage }) {
+    console.log('Checking the item status');
     switch (itemType) {
         case 'RQ':
             const requirement = await aqua.getRequirement(itemId);
-            console.log('Checking if the item is ready to merge');
             if (!aqua.hasStatus(statusId, requirement)) {
-                githubCore.setFailed(`Item is not ready to merge`);
+                githubCore.setFailed(statusNotSetMessage);
             }
             break;
         case 'DF':
             const defect = await aqua.getDefect(itemId);
-            console.log('Checking the item status');
             if (!aqua.hasStatus(statusId, defect)) {
                 githubCore.setFailed(statusNotSetMessage);
             }
@@ -4797,6 +4818,13 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const githubCore = __importStar(__nccwpck_require__(7561));
 const aqua_1 = __nccwpck_require__(5770);
 const checkStatus_1 = __nccwpck_require__(4530);
+/* Overview
+- Extract the item code from the branch name.
+- Use said item code to determine the item type and Id.
+- Fetch the item details using Aqua's REST API.
+- Check if the required status code is set.
+- Fail the action with the given message if necessary
+ */
 try {
     const branchName = githubCore.getInput('branch_name');
     const branchNameExpr = githubCore.getInput('branch_name_expr');
@@ -4838,6 +4866,10 @@ try {
 catch (error) {
     githubCore.setFailed(error.message);
 }
+/**
+ * Generic error handler to use in Promise.catch statements
+ * @param error The error that was raised
+ */
 function handleError(error) {
     githubCore.setFailed(error.message ?? 'An error occurred');
 }
