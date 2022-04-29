@@ -28,4 +28,4 @@ outputs:
     description: 'The numeric item number (still as a string padded with 0''s)'
 runs:
   using: 'node16'
-  main: 'index.js'
+  main: 'dist/index.js'

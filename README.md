@@ -48,7 +48,7 @@ The numeric item number (still as a string padded with 0''s)
     with:
       branch_name: '${{ github.head_ref }}'
       branch_name_expr: '(.*)\/.*'
-      username: '${{ env.AQUA_USERNAME }}'
+      username: '${{ secrets.AQUA_USERNAME }}'
       password: '${{ secrets.AQUA_PASSWORD }}'
-      aqua_url: '${{ env.AQUA_URL }}'
+      aqua_url: '${{ secrets.AQUA_URL }}'
       ready_to_merge_status_id: '20294'
