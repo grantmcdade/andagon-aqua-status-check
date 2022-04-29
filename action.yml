@@ -16,15 +16,18 @@ inputs:
   password:
     description: 'The password of the AQUA user'
     required: true
-  ready_to_merge_status_id:
+  status_id_to_check:
     description: 'The Id of the status code required for the action to succeed'
     required: true
+  status_not_set_message:
+    description: 'The text to show if the item does not have the specified status'
+    required: true
 outputs:
-  itemCode:
+  item_code:
     description: 'The complete item code'
-  itemType:
+  item_type:
     description: 'The 2 character item type i.e. RQ or DF etc.'
-  itemId:
+  item_id:
     description: 'The numeric item number (still as a string padded with 0''s)'
 runs:
   using: 'node16'

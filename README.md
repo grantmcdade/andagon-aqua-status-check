@@ -24,9 +24,13 @@ This action checks the status of defects and requirements in Andagon's Aqua prod
 
 **Required** The password of the AQUA user
 
-## `ready_to_merge_status_id`
+## `status_id_to_check`
 
 **Required** The Id of the status code required for the action to succeed
+
+## `status_not_set_message`
+
+**Required** The text to show if the item **does not have** the specified status
 
 ## Outputs
 
@@ -51,4 +55,5 @@ The numeric item number (still as a string padded with 0''s)
       username: '${{ secrets.AQUA_USERNAME }}'
       password: '${{ secrets.AQUA_PASSWORD }}'
       aqua_url: '${{ secrets.AQUA_URL }}'
-      ready_to_merge_status_id: '20294'
+      status_id_to_check: '20294'
+      status_not_set_message: The item is not ready to merge

@@ -66,12 +66,12 @@ export class Aqua {
 
   /**
    * Check that the item is ready to merge
-  * @param readyToMergeStatusId The Id of the status that indicates 'ready to merge
+   * @param statusId The Id of the status to look for
    * @param item The item that should be checked
    * @returns true if the item has the specified status
    */
-  hasStatus(readyToMergeStatusId: number, item: BaseObject) {
+  hasStatus(statusId: number, item: BaseObject) {
     const field = item.Details.filter(f => f.Id === 'Status')?.[0];
-    return field?.Value?.Id === readyToMergeStatusId;
+    return field?.Value?.Id === statusId;
   }
 }

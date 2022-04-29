@@ -26,5 +26,6 @@ jobs:
               username: '${{ secrets.AQUA_USERNAME }}'
               password: '${{ secrets.AQUA_PASSWORD }}'
               aqua_url: '${{ secrets.AQUA_URL }}'
-              ready_to_merge_status_id: '20294'
+              status_id_to_check: '20294'
+              status_not_set_message: The item is not ready to merge
               

@@ -4694,16 +4694,73 @@ class Aqua {
     }
     /**
      * Check that the item is ready to merge
-    * @param readyToMergeStatusId The Id of the status that indicates 'ready to merge
+     * @param statusId The Id of the status to look for
      * @param item The item that should be checked
      * @returns true if the item has the specified status
      */
-    hasStatus(readyToMergeStatusId, item) {
+    hasStatus(statusId, item) {
         const field = item.Details.filter(f => f.Id === 'Status')?.[0];
-        return field?.Value?.Id === readyToMergeStatusId;
+        return field?.Value?.Id === statusId;
     }
 }
 exports.Aqua = Aqua;
+
+
+/***/ }),
+
+/***/ 4530:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.checkStatus = void 0;
+const githubCore = __importStar(__nccwpck_require__(7561));
+async function checkStatus({ aqua, statusId, itemType, itemId, statusNotSetMessage }) {
+    switch (itemType) {
+        case 'RQ':
+            const requirement = await aqua.getRequirement(itemId);
+            console.log('Checking if the item is ready to merge');
+            if (!aqua.hasStatus(statusId, requirement)) {
+                githubCore.setFailed(`Item is not ready to merge`);
+            }
+            break;
+        case 'DF':
+            const defect = await aqua.getDefect(itemId);
+            console.log('Checking the item status');
+            if (!aqua.hasStatus(statusId, defect)) {
+                githubCore.setFailed(statusNotSetMessage);
+            }
+            break;
+        default:
+            githubCore.setFailed(`Unknown item type "${itemType}"`);
+            break;
+    }
+}
+exports.checkStatus = checkStatus;
 
 
 /***/ }),
@@ -4739,13 +4796,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const githubCore = __importStar(__nccwpck_require__(7561));
 const aqua_1 = __nccwpck_require__(5770);
+const checkStatus_1 = __nccwpck_require__(4530);
 try {
     const branchName = githubCore.getInput('branch_name');
     const branchNameExpr = githubCore.getInput('branch_name_expr');
     const username = githubCore.getInput('username');
     const password = githubCore.getInput('password');
     const url = githubCore.getInput('aqua_url');
-    const readyToMergeStatusId = parseInt(githubCore.getInput('ready_to_merge_status_id'), 10); // '20294';
+    const statusId = parseInt(githubCore.getInput('status_id_to_check'), 10); // '20294';
+    const statusNotSetMessage = githubCore.getInput('status_not_set_message');
     console.log(`Checking ${branchName}`);
     const regex = new RegExp(branchNameExpr);
     if (regex.test(branchName)) {
@@ -4764,7 +4823,7 @@ try {
             .then((success) => {
             if (success) {
                 console.log('Checking the item status');
-                return checkStatus(aqua, readyToMergeStatusId, itemType, itemId);
+                return (0, checkStatus_1.checkStatus)({ aqua, statusId, itemType, itemId, statusNotSetMessage });
             }
             else {
                 console.log('Failed to log in');
@@ -4781,27 +4840,6 @@ catch (error) {
 }
 function handleError(error) {
     githubCore.setFailed(error.message ?? 'An error occurred');
-}
-async function checkStatus(aqua, readyToMergeStatusId, itemType, itemId) {
-    switch (itemType) {
-        case 'RQ':
-            const requirement = await aqua.getRequirement(itemId);
-            console.log('Checking if the item is ready to merge');
-            if (!aqua.hasStatus(readyToMergeStatusId, requirement)) {
-                githubCore.setFailed(`Item is not ready to merge`);
-            }
-            break;
-        case 'DF':
-            const defect = await aqua.getDefect(itemId);
-            console.log('Checking if the item is ready to merge');
-            if (!aqua.hasStatus(readyToMergeStatusId, defect)) {
-                githubCore.setFailed(`Item is not ready to merge`);
-            }
-            break;
-        default:
-            githubCore.setFailed(`Unknown item type "${itemType}"`);
-            break;
-    }
 }
 
 
