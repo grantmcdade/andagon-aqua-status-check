@@ -34,7 +34,7 @@ jobs:
           - name: Test action
             id: check2
             run: |
-              echo "::set-output name=status::'failure'
+              echo "::set-output name=status::'failure'"
 
           - name: Combine PR Check Actions
             uses: LouisBrunner/checks-action@3d24d4813a797720cc4e2080a50bdafb3373aef1 #v1.2.0
