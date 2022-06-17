@@ -27,3 +27,10 @@ jobs:
               aqua_url: 'https://aqua-saas2.andagon.com/aquaWebNG'
               status_id_to_check: '20294'
               status_not_set_message: The item is not ready to merge
+
+          - name: Combine PR Check Actions
+            uses: LouisBrunner/checks-action@3d24d4813a797720cc4e2080a50bdafb3373aef1 #v1.2.0
+            with:
+              token: ${{ secrets.GITHUB_TOKEN }}
+              name: Combined Step Results
+              check_id: check
