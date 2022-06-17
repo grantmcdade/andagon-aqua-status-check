@@ -15,9 +15,12 @@ concurrency:
 jobs:
     check:
         runs-on: ubuntu-latest
+        defaults:
+          run:
+            shell: pwsh
         steps:
           - name: Check the item status
-            id: check
+            id: check1
             uses: grantmcdade/andagon-aqua-status-check@v1
             with:
               branch_name: '${{ github.head_ref }}'
@@ -28,8 +31,13 @@ jobs:
               status_id_to_check: '20294'
               status_not_set_message: The item is not ready to merge
 
+          - name: Test action
+            id: check2
+            run: |
+              echo "::set-output name=status::'failure'
+
           - name: Combine PR Check Actions
             uses: LouisBrunner/checks-action@3d24d4813a797720cc4e2080a50bdafb3373aef1 #v1.2.0
             with:
               token: ${{ secrets.GITHUB_TOKEN }}
-              check_id: check
+              actions:  "[ \"check1\", \"check2\" ]"
