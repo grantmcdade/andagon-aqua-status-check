@@ -42,4 +42,4 @@ jobs:
               token: ${{ secrets.GITHUB_TOKEN }}
               name: Combined PR Check Actions Internal
               actions:  "[ \"check1\", \"check2\" ]"
-              onclusion: ${{ steps.check2.outputs.status }}
+              conclusion: ${{ steps.check2.outputs.status }}
