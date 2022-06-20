@@ -33,13 +33,12 @@ jobs:
 
           - name: Test action
             id: check2
-            run: |
-              echo "::set-output name=status::failure"
+            run: false
 
-          - name: Combine PR Check Actions
-            uses: LouisBrunner/checks-action@3d24d4813a797720cc4e2080a50bdafb3373aef1 #v1.2.0
+          - uses: LouisBrunner/checks-action@3d24d4813a797720cc4e2080a50bdafb3373aef1 #v1.2.0
             with:
               token: ${{ secrets.GITHUB_TOKEN }}
-              name: Combined PR Check Actions Internal
-              actions:  "[ \"check1\", \"check2\" ]"
-              conclusion: ${{ steps.check2.outputs.status }}
+              name: Combined PR Check Actions
+              conclusion: ${{ job.status }}
+              output: |
+                {"summary":"The PR checks did not all pass"}
