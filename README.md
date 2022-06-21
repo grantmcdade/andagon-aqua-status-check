@@ -52,8 +52,8 @@ The numeric item number (still as a string padded with 0''s)
     with:
       branch_name: '${{ github.head_ref }}'
       branch_name_expr: '(.*)\/.*'
-      username: '${{ secrets.AQUA_USERNAME }}'
+      username: '<aqua_username>'
       password: '${{ secrets.AQUA_PASSWORD }}'
-      aqua_url: '${{ secrets.AQUA_URL }}'
+      aqua_url: '<aqua_url>'
       status_id_to_check: '20294'
       status_not_set_message: The item is not ready to merge
