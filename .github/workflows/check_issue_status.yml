@@ -9,37 +9,42 @@ on:
       - .github/workflows/build.yml
       - .github/workflows/check_issue_status.yml
 concurrency:
-  group: "vue-${{ github.ref }}-${{ github.workspace }}"
+  group: 'vue-${{ github.ref }}-${{ github.workspace }}'
   cancel-in-progress: true
 
 jobs:
-    check:
-        runs-on: ubuntu-latest
-        defaults:
-          run:
-            shell: pwsh
-        steps:
-          - name: Check the item status
-            id: check1
-            uses: grantmcdade/andagon-aqua-status-check@v1
-            with:
-              branch_name: '${{ github.head_ref }}'
-              branch_name_expr: '(.*)\/.*'
-              username: 'McdadeGr@aquacloud'
-              password: '${{ secrets.AQUA_PASSWORD }}'
-              aqua_url: 'https://aqua-saas2.andagon.com/aquaWebNG'
-              status_id_to_check: '20294'
-              status_not_set_message: The item is not ready to merge
+  check-if-ready-to-merge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check the item status
+        id: check1
+        uses: grantmcdade/andagon-aqua-status-check@v1
+        with:
+          branch_name: '${{ github.head_ref }}'
+          branch_name_expr: '(.*)\/.*'
+          username: 'McdadeGr@aquacloud'
+          password: '${{ secrets.AQUA_PASSWORD }}'
+          aqua_url: 'https://aqua-saas2.andagon.com/aquaWebNG'
+          status_id_to_check: '20294'
+          status_not_set_message: The item is not ready to merge
 
-          - name: Test action
-            id: check2
-            run: |
-              echo "Test"
+      - uses: LouisBrunner/checks-action@3d24d4813a797720cc4e2080a50bdafb3373aef1 #v1.2.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: Combined PR Check Actions
+          conclusion: ${{ job.status }}
 
-          - uses: LouisBrunner/checks-action@3d24d4813a797720cc4e2080a50bdafb3373aef1 #v1.2.0
-            with:
-              token: ${{ secrets.GITHUB_TOKEN }}
-              name: Combined PR Check Actions
-              conclusion: ${{ job.status }}
-              output: |
-                {"summary":"The PR checks did not all pass"}
+  check-something-else:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - name: Something Else
+        run: false
+        
+      - uses: LouisBrunner/checks-action@3d24d4813a797720cc4e2080a50bdafb3373aef1 #v1.2.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: Combined PR Check Actions
+          conclusion: ${{ job.status }}
