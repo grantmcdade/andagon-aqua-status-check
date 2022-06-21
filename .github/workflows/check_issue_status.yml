@@ -31,7 +31,7 @@ jobs:
       - uses: LouisBrunner/checks-action@3d24d4813a797720cc4e2080a50bdafb3373aef1 #v1.2.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          name: Combined PR Check Actions
+          name: Check if ready to merge
           conclusion: ${{ job.status }}
 
   check-something-else:
@@ -41,10 +41,11 @@ jobs:
         shell: pwsh
     steps:
       - name: Something Else
-        run: false
-        
+        run: |
+          echo "Test"
+
       - uses: LouisBrunner/checks-action@3d24d4813a797720cc4e2080a50bdafb3373aef1 #v1.2.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          name: Combined PR Check Actions
+          name: Check Something Else
           conclusion: ${{ job.status }}
