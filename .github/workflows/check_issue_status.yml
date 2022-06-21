@@ -17,7 +17,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check the item status
-        id: check1
         uses: grantmcdade/andagon-aqua-status-check@v1
         with:
           branch_name: '${{ github.head_ref }}'
@@ -27,25 +26,3 @@ jobs:
           aqua_url: 'https://aqua-saas2.andagon.com/aquaWebNG'
           status_id_to_check: '20294'
           status_not_set_message: The item is not ready to merge
-
-      - uses: LouisBrunner/checks-action@3d24d4813a797720cc4e2080a50bdafb3373aef1 #v1.2.0
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          name: Check if ready to merge
-          conclusion: ${{ job.status }}
-
-  check-something-else:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: pwsh
-    steps:
-      - name: Something Else
-        run: |
-          echo "Test"
-
-      - uses: LouisBrunner/checks-action@3d24d4813a797720cc4e2080a50bdafb3373aef1 #v1.2.0
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          name: Check Something Else
-          conclusion: ${{ job.status }}
