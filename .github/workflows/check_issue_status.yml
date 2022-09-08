@@ -9,23 +9,20 @@ on:
       - .github/workflows/build.yml
       - .github/workflows/check_issue_status.yml
 concurrency:
-  group: "vue-${{ github.ref }}-${{ github.workspace }}"
+  group: 'vue-${{ github.ref }}-${{ github.workspace }}'
   cancel-in-progress: true
 
 jobs:
-    check:
-        runs-on: ubuntu-latest
-        steps:
-          - uses: actions/checkout@v3
-          - name: Check the item status
-            id: check
-            uses: grantmcdade/andagon-aqua-status-check@925549fdaeb8c2eaa8ecf5ae57972e48971ff530
-            with:
-              branch_name: '${{ github.head_ref }}'
-              branch_name_expr: '(.*)\/.*'
-              username: '${{ secrets.AQUA_USERNAME }}'
-              password: '${{ secrets.AQUA_PASSWORD }}'
-              aqua_url: '${{ secrets.AQUA_URL }}'
-              status_id_to_check: '20294'
-              status_not_set_message: The item is not ready to merge
-              
+  check-if-ready-to-merge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check the item status
+        uses: grantmcdade/andagon-aqua-status-check@v1
+        with:
+          branch_name: '${{ github.head_ref }}'
+          branch_name_expr: '(.*)\/.*'
+          username: 'McdadeGr@aquacloud'
+          password: '${{ secrets.AQUA_PASSWORD }}'
+          aqua_url: 'https://aqua-saas2.andagon.com/aquaWebNG'
+          status_id_to_check: '20294'
+          status_not_set_message: The item is not ready to merge
